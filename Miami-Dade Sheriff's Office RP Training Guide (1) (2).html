@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Miami-Dade Sheriff's Office - RP Training Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        mdso: {
+                            black: '#000000',
+                            panel: '#0a0f1d',
+                            border: '#1e293b',
+                            card: '#111827',
+                            hover: '#1a263d',
+                            accent: '#1d4ed8',
+                            gold: '#fbbf24',
+                            goldBorder: '#d97706',
+                            text: '#f1f5f9',
+                            dim: '#94a3b8',
+                            green: '#10b981',
+                            red: '#ef4444'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #000000; color: #f1f5f9; touch-action: manipulation; }
+        .mono { font-family: 'Share Tech Mono', monospace; }
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: #000000; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 2px; }
+        ::-webkit-scrollbar-thumb:hover { background: #d97706; }
+        @media (hover: none) and (pointer: coarse) {
+            button, input, select { min-height: 44px; }
+        }
+        .modal-enter { animation: modalIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.95) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-black">
+
+    <header class="bg-mdso-panel border-b border-mdso-goldBorder/40 sticky top-0 z-50 px-4 py-3 shadow-md">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-start">
+                <div class="flex items-center gap-3">
+                    <div class="bg-blue-950/80 border border-mdso-goldBorder p-1.5 rounded-lg flex items-center justify-center shrink-0 shadow-inner">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Seal_of_the_Miami-Dade_Sheriff%27s_Office.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original" alt="MDSO Seal" class="w-9 h-9 object-contain" onerror="this.onerror=null; this.src='https://placehold.co/36x36/131c31/fbbf24?text=MDSO'">
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-sm sm:text-base md:text-lg tracking-wider text-white flex items-center gap-2 mono">
+                            MIAMI-DADE SHERIFF'S OFFICE <span class="text-[10px] bg-amber-500/20 text-mdso-gold px-2 py-0.5 rounded border border-mdso-goldBorder/60 font-mono">OFFICIAL REPOSITORY</span>
+                        </h1>
+                        <p class="text-[11px] text-mdso-gold/90 mono tracking-tight font-medium">STATEWIDE DISPATCH 10-CODES, SIGNALS & PROTOCOLS</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 w-full sm:w-auto justify-end text-xs mono">
+                <div class="bg-mdso-black px-3.5 py-1.5 rounded-md border border-mdso-border text-amber-400 flex items-center gap-2 shadow-sm">
+                    <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                    <span>SECURE NET ACTIVE • CLICK ANY CODE/SIGNAL FOR DETAILS</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="bg-mdso-panel border-b border-mdso-border px-3 py-2.5 sticky top-[61px] sm:top-[69px] z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto flex gap-1.5 overflow-x-auto scrollbar-none text-xs">
+            <button onclick="switchTab('codes')" id="btn-codes" class="tab-btn px-3.5 py-2 rounded-md bg-amber-500 text-black font-bold whitespace-nowrap transition cursor-pointer mono flex items-center gap-2 shadow-md">
+                <i class="fa-solid fa-radio"></i> 10-CODES REPOSITORY
+            </button>
+            <button onclick="switchTab('signals')" id="btn-signals" class="tab-btn px-3.5 py-2 rounded-md bg-mdso-black border border-mdso-border text-slate-300 hover:bg-mdso-hover whitespace-nowrap transition cursor-pointer mono flex items-center gap-2">
+                <i class="fa-solid fa-signal"></i> SIGNALS & INCIDENTS
+            </button>
+            <button onclick="switchTab('channels')" id="btn-channels" class="tab-btn px-3.5 py-2 rounded-md bg-mdso-black border border-mdso-border text-slate-300 hover:bg-mdso-hover whitespace-nowrap transition cursor-pointer mono flex items-center gap-2">
+                <i class="fa-solid fa-tower-broadcast"></i> CHANNELS & RESPONSE
+            </button>
+            <button onclick="switchTab('policy')" id="btn-policy" class="tab-btn px-3.5 py-2 rounded-md bg-mdso-black border border-mdso-border text-slate-300 hover:bg-mdso-hover whitespace-nowrap transition cursor-pointer mono flex items-center gap-2">
+                <i class="fa-solid fa-users"></i> PARTNER POLICY
+            </button>
+            <button onclick="switchTab('force')" id="btn-force" class="tab-btn px-3.5 py-2 rounded-md bg-mdso-black border border-mdso-border text-slate-300 hover:bg-mdso-hover whitespace-nowrap transition cursor-pointer mono flex items-center gap-2">
+                <i class="fa-solid fa-shield-alert"></i> USE OF FORCE
+            </button>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl w-full mx-auto p-3 sm:p-5 flex-grow">
+        
+        <!-- TAB 1: 10-CODES REPOSITORY -->
+        <div id="tab-codes" class="tab-content flex flex-col gap-4">
+            <div class="bg-mdso-panel border border-mdso-border rounded-xl p-4 sm:p-5 shadow-lg">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
+                    <div>
+                        <h2 class="text-xs sm:text-sm font-semibold uppercase tracking-wider text-mdso-gold flex items-center gap-2 mono">
+                            <i class="fa-solid fa-book-bookmark text-amber-500"></i> OFFICIAL 10-CODE DIRECTORY
+                        </h2>
+                        <p class="text-[11px] text-mdso-dim mono">Click any 10-code card to view exact radio transmission phrasing, definitions, and field protocols.</p>
+                    </div>
+                    <div class="relative w-full sm:w-80">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-mdso-dim"><i class="fa-solid fa-magnifying-glass text-xs"></i></span>
+                        <input type="text" id="searchCodes" placeholder="Search 10-codes or descriptions..." onkeyup="filterCodes()"
+                            class="w-full bg-mdso-black border border-mdso-border rounded-lg pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 mono shadow-inner">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[520px] overflow-y-auto pr-1" id="codesGrid">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: SIGNALS & INCIDENTS -->
+        <div id="tab-signals" class="tab-content hidden flex flex-col gap-4">
+            <div class="bg-mdso-panel border border-mdso-border rounded-xl p-4 sm:p-5 shadow-lg">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4">
+                    <div>
+                        <h2 class="text-xs sm:text-sm font-semibold uppercase tracking-wider text-mdso-gold flex items-center gap-2 mono">
+                            <i class="fa-solid fa-signal text-amber-500"></i> OFFICIAL SIGNALS & INCIDENT DIRECTORY
+                        </h2>
+                        <p class="text-[11px] text-mdso-dim mono">Browse or search standard departmental signals (S0 through S99) and special broadcasts.</p>
+                    </div>
+                    <div class="relative w-full sm:w-80">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-mdso-dim"><i class="fa-solid fa-magnifying-glass text-xs"></i></span>
+                        <input type="text" id="searchSignals" placeholder="Search signals, e.g. S4, Burglary..." onkeyup="filterSignals()"
+                            class="w-full bg-mdso-black border border-mdso-border rounded-lg pl-9 pr-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500 mono shadow-inner">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[520px] overflow-y-auto pr-1" id="signalsGrid">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: CHANNELS & RESPONSE -->
+        <div id="tab-channels" class="tab-content hidden flex flex-col gap-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div class="bg-mdso-panel border border-mdso-border rounded-xl p-4 sm:p-5 shadow-lg">
+                    <h2 class="text-xs sm:text-sm font-semibold uppercase tracking-wider text-mdso-gold mb-3 flex items-center gap-2 mono">
+                        <i class="fa-solid fa-tower-broadcast text-amber-500"></i> RADIO CHANNEL ASSIGNMENTS
+                    </h2>
+                    <div class="space-y-2.5" id="channelsList"></div>
+                </div>
+                <div class="bg-mdso-panel border border-mdso-border rounded-xl p-4 sm:p-5 shadow-lg">
+                    <h2 class="text-xs sm:text-sm font-semibold uppercase tracking-wider text-mdso-gold mb-3 flex items-center gap-2 mono">
+                        <i class="fa-solid fa-bolt text-amber-400"></i> EMERGENCY RESPONSE CODES
+                    </h2>
+                    <div class="space-y-2.5" id="responseCodesList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: PARTNER POLICY -->
+        <div id="tab-policy" class="tab-content hidden flex flex-col gap-4">
+            <div class="bg-mdso-panel border border-mdso-border rounded-xl p-5 sm:p-6 shadow-lg relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="bg-blue-950/80 border border-mdso-goldBorder p-2.5 rounded-lg text-mdso-gold shrink-0 flex items-center justify-center shadow-inner">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Seal_of_the_Miami-Dade_Sheriff%27s_Office.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original" alt="MDSO Seal" class="w-8 h-8 object-contain" onerror="this.onerror=null; this.src='https://placehold.co/32x32/131c31/fbbf24?text=MDSO'">
+                    </div>
+                    <div>
+                        <span class="bg-amber-500/20 text-mdso-gold text-[10px] font-bold px-2 py-0.5 rounded border border-mdso-goldBorder/60 uppercase tracking-wider mono">STRICTLY ENFORCED BY COMMAND STAFF</span>
+                        <h2 class="text-base sm:text-lg font-bold text-white mt-1.5 mono">MANDATORY MDSO PARTNER POLICY</h2>
+                    </div>
+                </div>
+
+                <div class="space-y-4 text-xs sm:text-sm text-slate-300 leading-relaxed mono">
+                    <p class="bg-mdso-black p-4 rounded-lg border border-mdso-border">
+                        Operating safely and cohesively is the top priority for deputies across Miami-Dade County. To protect personnel and maintain operational control, the partner policy must be strictly observed at all times on patrol.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                        <div class="bg-mdso-black p-4 rounded-lg border border-mdso-border">
+                            <h3 class="text-mdso-gold font-bold mb-1 flex items-center gap-2">
+                                <i class="fa-solid fa-user-group text-amber-500"></i> 2 or More Units Online
+                            </h3>
+                            <p class="text-xs text-slate-400">
+                                If there are 2 or more Deputies or Corporals on duty, you are <strong>required</strong> to partner up and operate from a single patrol vehicle before heading out on patrol.
+                            </p>
+                        </div>
+                        <div class="bg-mdso-black p-4 rounded-lg border border-mdso-border">
+                            <h3 class="text-mdso-gold font-bold mb-1 flex items-center gap-2">
+                                <i class="fa-solid fa-user text-amber-500"></i> Odd Numbers / Solo Patrol
+                            </h3>
+                            <p class="text-xs text-slate-400">
+                                If there is an odd number of units online, the highest ranking officer present may patrol independently. If you are the <strong>sole</strong> deputy on duty, solo patrol is authorized.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 5: USE OF FORCE CONTINUUM -->
+        <div id="tab-force" class="tab-content hidden flex flex-col gap-4">
+            <div class="bg-mdso-panel border border-mdso-border rounded-xl p-4 sm:p-6 shadow-lg">
+                <div class="mb-4">
+                    <h2 class="text-xs sm:text-sm font-semibold uppercase tracking-wider text-mdso-gold flex items-center gap-2 mono">
+                        <i class="fa-solid fa-shield-halved text-amber-500"></i> MIAMI-DADE SHERIFF'S OFFICE USE OF FORCE CONTINUUM
+                    </h2>
+                    <p class="text-[11px] text-mdso-dim mono">Standard escalation model guiding deputy response to civilian resistance and threat levels.</p>
+                </div>
+                <div class="space-y-3" id="forceLevelsContainer"></div>
+            </div>
+        </div>
+
+    </main>
+
+    <div id="codeModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-mdso-panel border border-mdso-goldBorder rounded-xl max-w-lg w-full p-5 sm:p-6 shadow-2xl modal-enter relative">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white text-base cursor-pointer">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="flex items-center gap-2.5 mb-3">
+                <span id="modalCodeBadge" class="px-2.5 py-1 rounded border mono font-bold text-xs bg-amber-950 text-amber-400 border-amber-800">10-4</span>
+                <h3 id="modalCodeTitle" class="text-sm sm:text-base font-bold text-white mono">Acknowledgement / OK</h3>
+            </div>
+            <div class="space-y-3.5 text-xs mono">
+                <div class="bg-mdso-black p-3.5 rounded-lg border border-mdso-border">
+                    <span class="text-mdso-gold text-[10px] font-bold block uppercase tracking-wider mb-1">Description</span>
+                    <p id="modalCodeDesc" class="text-slate-300 leading-relaxed">Acknowledgement or confirmation that instructions or dispatch details have been received.</p>
+                </div>
+                <div id="phrasingContainer" class="bg-blue-950/40 p-3.5 rounded-lg border border-blue-900/60">
+                    <span class="text-blue-400 text-[10px] font-bold block uppercase tracking-wider mb-1"><i class="fa-solid fa-microphone"></i> How It Should Be Said (Radio Phrasing)</span>
+                    <p id="modalCodePhrasing" class="text-white italic font-medium leading-relaxed">"10-4, Control. En route to the location now."</p>
+                </div>
+                <div class="bg-amber-500/10 p-3 rounded-lg border border-amber-500/30 text-amber-300 text-[11px] flex items-center gap-2">
+                    <i class="fa-solid fa-triangle-exclamation text-mdso-gold shrink-0"></i>
+                    <span id="modalCodeTip">Always state your unit callsign and acknowledge orders clearly.</span>
+                </div>
+            </div>
+            <div class="mt-5 text-right">
+                <button onclick="closeModal()" class="px-4 py-2 bg-amber-500 text-black font-bold text-xs rounded hover:bg-amber-400 transition cursor-pointer mono">
+                    CLOSE
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-mdso-panel border-t border-mdso-border py-3.5 px-4 text-center text-xs text-mdso-dim mono">
+        MIAMI-DADE SHERIFF'S OFFICE • OFFICIAL PORTAL
+    </footer>
+
+    <script>
+        const codesData = [
+            { code: "10-1", title: "Receiving Poorly", desc: "Radio transmission is breaking up or difficult to copy due to interference.", phrasing: "Control, 26-Alpha-04, you're receiving poorly, repeat your last transmission.", tip: "Move to a clearer area before re-transmitting." },
+            { code: "10-2", title: "Receiving Well", desc: "Radio transmission is coming through loud and clear.", phrasing: "Control, 26-Alpha-04 is receiving well on channel 1.", tip: "Acknowledge promptly when dispatch calls." },
+            { code: "10-3", title: "Stop Transmitting", desc: "Cease all non-emergency radio transmissions immediately.", phrasing: "Control, 10-3 all units, emergency traffic in progress.", tip: "Hold all routine traffic until channel is cleared." },
+            { code: "10-4", title: "Acknowledgement / OK", desc: "Standard confirmation that instructions or dispatch details have been received and understood.", phrasing: "10-4, Control. En route to the location now.", tip: "Always reply with 10-4 to confirm dispatch assignments." },
+            { code: "10-5", title: "Relay", desc: "Relay information or dispatch details to another unit or station.", phrasing: "Control, please relay this message to unit 26-Delta-02.", tip: "Keep relayed messages brief and concise." },
+            { code: "10-6", title: "Busy", desc: "Currently occupied with an assignment or unable to take new calls immediately.", phrasing: "Control, 26-Delta-02 is busy on a previous investigation.", tip: "Use when you are tied up on paperwork or interviews." },
+            { code: "10-7", title: "Out of Service", desc: "Unit is temporarily unavailable for dispatch due to meals, vehicle maintenance, or end of shift.", phrasing: "Control, 26-Delta-01 is out of service for meal break, 30 minutes.", tip: "Always advise dispatch of your estimated return time when going 10-7." },
+            { code: "10-8", title: "In Service", desc: "Unit is active, on patrol, and available to be dispatched to calls.", phrasing: "Control, 26-Delta-01 is back in service, available for calls.", tip: "Announce in service as soon as you clear a scene." },
+            { code: "10-9", title: "Repeat", desc: "Request for dispatcher or another unit to repeat their last radio broadcast.", phrasing: "Control, 26-Alpha-03, repeat on that street name.", tip: "Speak clearly when asking for a repeat." },
+            { code: "10-10", title: "Out of Service / Subject to Call", desc: "Unit is out of service but available if urgently needed.", phrasing: "Control, 26-Delta-02 is out of service subject to call at location.", tip: "Remain monitoring radio traffic." },
+            { code: "10-11", title: "Dispatching Too Quickly", desc: "Dispatch is transmitting faster than units can record or process.", phrasing: "Control, 26-Delta-04, you are dispatching too quickly.", tip: "Slow down transmission rate." },
+            { code: "10-12", title: "Officials or Visitors Present", desc: "Civilians, command staff, or visiting officials present in the patrol vehicle or station.", phrasing: "Control, be advised we have officials or visitors present in vehicle.", tip: "Ensure safety protocols are maintained." },
+            { code: "10-13", title: "Condition Of (Officer, Weather, Roads, etc.)", desc: "Inquiring about or broadcasting field conditions.", phrasing: "Control, checking condition of weather and road surfaces.", tip: "Warn incoming units of severe hazards." },
+            { code: "10-14", title: "Convoy or Escort", desc: "Providing security escort or transport convoy for officials or special cargo.", phrasing: "Control, 26-Delta-04 is on convoy or escort duty.", tip: "Maintain tight spacing and secure intersections." },
+            { code: "10-15", title: "Prisoner in Custody", desc: "Suspect has been arrested and is currently being secured or transported.", phrasing: "Control, 26-Delta-12 has one prisoner in custody, starting mileage 41,200.", tip: "Report starting and ending mileage." },
+            { code: "10-16", title: "Pick Up Prisoner at (Location)", desc: "Instructions to retrieve prisoner from specific location.", phrasing: "Control, 26-Delta-01 en route to pick up prisoner at location.", tip: "Secure prisoner properly before transport." },
+            { code: "10-17", title: "Maintain Surveillance, Do Not Stop", desc: "Keep visual surveillance on subject without initiating an immediate stop.", phrasing: "Control, maintaining surveillance, do not stop on suspect vehicle.", tip: "Keep distance and report movements." },
+            { code: "10-18", title: "Complete Assignment Quickly", desc: "Urgent handling of current assignment without emergency lights/sirens.", phrasing: "Control, proceeding to complete assignment quickly.", tip: "Drive with heightened caution." },
+            { code: "10-19", title: "Return to Station / Office", desc: "Heading back to the sheriff's office station or headquarters.", phrasing: "Control, 26-Delta-01 returning to station / office.", tip: "Log status change upon arrival." },
+            { code: "10-20", title: "What Is Your Location?", desc: "Inquiring about or broadcasting your current physical address or street intersection.", phrasing: "Control, what is my location? / My 10-20 is Biscayne Blvd and 8th Street.", tip: "Know your cross streets at all times." },
+            { code: "10-21", title: "Call Station / Office by Phone", desc: "Request to contact dispatch or another station via telephone line.", phrasing: "Control, 26-Delta-03 calling station / office by phone.", tip: "Use secure lines for sensitive comms." },
+            { code: "10-22", title: "Disregard", desc: "Cancel the previous order, call, or instructions given.", phrasing: "Control, disregard on that last call.", tip: "Use quickly if situation resolves." },
+            { code: "10-23", title: "Stand By", desc: "Hold current position or wait for further instructions.", phrasing: "Control, 26-Delta-01 standing by.", tip: "Remain alert on channel." },
+            { code: "10-24", title: "TROUBLE — SEND HELP", desc: "Emergency distress call for urgent assistance.", phrasing: "TROUBLE! Send help to my location immediately!", tip: "All units respond Code 3." },
+            { code: "10-25", title: "In Contact With", desc: "Meeting or interacting with involved party or suspect.", phrasing: "Control, 26-Delta-01 in contact with complainant.", tip: "Document statement details." },
+            { code: "10-26", title: "Message Received", desc: "Confirmation that message was fully understood.", phrasing: "Control, message received.", tip: "Confirm promptly." },
+            { code: "10-27", title: "Check License (Specify)", desc: "Requesting dispatch to run civilian driver license.", phrasing: "Control, check license for Jane Doe.", tip: "Verify spelling carefully." },
+            { code: "10-28", title: "Check Registration (Specify)", desc: "Requesting dispatch to verify license plate and registration.", phrasing: "Control, check registration for tag 123ABC.", tip: "Read tag characters distinctly." },
+            { code: "10-29", title: "Check for Stolen / Wanted (Specify)", desc: "Running subject or vehicle through database for stolen/wanted records.", phrasing: "Control, check for stolen / wanted on vehicle tag.", tip: "Verify status before action." },
+            { code: "10-29P", title: "Check for Wanted Person", desc: "Checking databases specifically for active wanted person warrants.", phrasing: "Control, check for wanted person on subject John Smith.", tip: "Request confirmation if hit." },
+            { code: "10-30", title: "Against Rules / Regulations", desc: "Action or transmission violates department policies.", phrasing: "Control, that transmission is against rules / regulations.", tip: "Maintain proper procedure." },
+            { code: "10-31", title: "IN PURSUIT", desc: "Active vehicular or foot pursuit of a fleeing suspect.", phrasing: "IN PURSUIT! Heading southbound on I-95.", tip: "Broadcast direction and speed." },
+            { code: "10-32", title: "Breathalyzer", desc: "Conducting breath alcohol test at station or mobile unit.", phrasing: "Control, conducting breathalyzer test.", tip: "Follow standard testing protocol." },
+            { code: "10-33", title: "EMERGENCY RADIO TRAFFIC", desc: "Emergency radio traffic only. Officer is in grave danger.", phrasing: "EMERGENCY RADIO TRAFFIC! Clear the channel!", tip: "Cease all routine chatter." },
+            { code: "10-34", title: "Subpoena", desc: "Serving or checking court subpoena.", phrasing: "Control, handling subpoena document.", tip: "Log service details." },
+            { code: "10-35", title: "Confidential Information", desc: "Transmitting confidential intelligence.", phrasing: "Control, transmitting confidential information.", tip: "Ensure restricted channel." },
+            { code: "10-36", title: "Correct Time", desc: "Inquiring about exact synchronized time.", phrasing: "Control, what is the correct time?", tip: "Synchronize logs." },
+            { code: "10-37", title: "Operator on Duty?", desc: "Checking if radio operator is active at station.", phrasing: "Control, operator on duty?", tip: "Confirm station manning." },
+            { code: "10-38", title: "Block Roads / Waterways At?", desc: "Requesting roadblocks established at specific point.", phrasing: "Control, block roads at intersection.", tip: "Setup flare patterns." },
+            { code: "10-38A-YEL", title: "Police Roadblock Visual — Armed Felon", desc: "Visual roadblock setup for armed felon.", phrasing: "Roadblock visual established for armed felon.", tip: "Maintain high cover." },
+            { code: "10-38A-RED", title: "Police Roadblock Visual — Hostage", desc: "Visual roadblock setup during hostage incident.", phrasing: "Roadblock visual established for hostage incident.", tip: "Exercise extreme caution." },
+            { code: "10-38A-BLU", title: "Police Roadblock Visual — LEO Hostage", desc: "Visual roadblock setup during LEO hostage incident.", phrasing: "Roadblock visual established for LEO hostage.", tip: "Coordinate tactical command." },
+            { code: "10-38B-YEL", title: "Police Roadblock Physical — Armed Felon", desc: "Physical roadblock setup for armed felon.", phrasing: "Roadblock physical established for armed felon.", tip: "Tactical positioning required." },
+            { code: "10-38B-RED", title: "Police Roadblock Physical — Hostage", desc: "Physical roadblock setup during hostage situation.", phrasing: "Roadblock physical established for hostage.", tip: "Hold containment perimeter." },
+            { code: "10-38B-BLU", title: "Police Roadblock Physical — LEO Hostage", desc: "Physical roadblock setup for LEO hostage.", phrasing: "Roadblock physical established for LEO hostage.", tip: "Command staff notification." },
+            { code: "10-38C-YEL", title: "Police Roadblock Physical / Search — Armed Felon", desc: "Physical roadblock and search for armed felon.", phrasing: "Roadblock physical / search for armed felon.", tip: "Conduct systematic search." },
+            { code: "10-38C-RED", title: "Police Roadblock Physical / Search — Hostage", desc: "Physical roadblock and search during hostage incident.", phrasing: "Roadblock physical / search for hostage.", tip: "Coordinate rescue teams." },
+            { code: "10-38C-BLU", title: "Police Roadblock Physical / Search — LEO Hostage", desc: "Physical roadblock and search during LEO hostage incident.", phrasing: "Roadblock physical / search for LEO hostage.", tip: "Full tactical mobilization." },
+            { code: "10-38X-YEL", title: "Police Roadblock Simulated — Training", desc: "Simulated roadblock for tactical training exercise.", phrasing: "Roadblock simulated training exercise in progress.", tip: "Training mode active." },
+            { code: "10-39", title: "Message Delivered", desc: "Confirmation that dispatch message was delivered.", phrasing: "Control, message delivered.", tip: "Log final disposition." },
+            { code: "10-40", title: "Request Radio / Electronics Repair", desc: "Reporting radio or equipment malfunction.", phrasing: "Control, requesting radio / electronics repair.", tip: "Swap to backup radio if needed." },
+            { code: "10-41", title: "In Possession Of", desc: "In possession of evidence or items.", phrasing: "Control, in possession of recovered property.", tip: "Log evidence correctly." },
+            { code: "10-42", title: "Out of Service at Home", desc: "Unit out of service at personal residence.", phrasing: "Control, 26-Delta-01 out of service at home.", tip: "Remain reachable by phone." },
+            { code: "10-43", title: "Any Information For?", desc: "Inquiring if dispatch has messages for unit.", phrasing: "Control, any information for 26-Delta-01?", tip: "Check message queue." },
+            { code: "10-44", title: "Pick Up Papers At", desc: "Instructions to retrieve documents.", phrasing: "Control, picking up papers at station.", tip: "Verify document receipt." },
+            { code: "10-45", title: "Call ____ By Phone At", desc: "Request to call designated number.", phrasing: "Control, call designated party by phone.", tip: "Use secure line." },
+            { code: "10-46", title: "URGENT", desc: "Urgent priority message.", phrasing: "Control, urgent message transmission.", tip: "Give priority." },
+            { code: "10-47", title: "Reports", desc: "Working on incident reports.", phrasing: "Control, 10-6 working on reports.", tip: "Complete paperwork accurately." },
+            { code: "10-48", title: "End of Message — Did You Receive?", desc: "Concluding transmission and asking for confirmation.", phrasing: "End of message, did you receive?", tip: "Confirm receipt." },
+            { code: "10-49", title: "Contact SO or PD Unit (Specify)", desc: "Instructions to contact specific Sheriff Office or Police Department unit.", phrasing: "Control, contact specified SO or PD unit.", tip: "Coordinate inter-agency actions." },
+            { code: "10-50", title: "Stopping Vehicle / Vessel", desc: "Initiating stop on vehicle or boat.", phrasing: "Control, stopping vehicle / vessel.", tip: "Broadcast location." },
+            { code: "10-51", title: "Enroute", desc: "Traveling to destination.", phrasing: "Control, enroute to assignment.", tip: "Drive safely." },
+            { code: "10-52", title: "Estimated Time of Arrival", desc: "Broadcasting ETA.", phrasing: "Control, estimated time of arrival 4 minutes.", tip: "Update if delayed." },
+            { code: "10-53", title: "Coming To Station / Office", desc: "Traveling to headquarters.", phrasing: "Control, coming to station / office.", tip: "Log arrival." },
+            { code: "10-54", title: "Negative", desc: "Negative response.", phrasing: "Control, negative on query.", tip: "Clear statement." },
+            { code: "10-55", title: "Mobile Unit Calling to Mobile Unit", desc: "Car-to-car radio transmission.", phrasing: "Mobile unit calling mobile unit.", tip: "Use tactical channel." },
+            { code: "10-56", title: "Meet At", desc: "Rendezvous at location.", phrasing: "Control, meeting at designated location.", tip: "Confirm spot." },
+            { code: "10-57", title: "Departing Zone", desc: "Leaving assigned sector.", phrasing: "Control, departing zone.", tip: "Notify dispatch." },
+            { code: "10-58", title: "Entering Zone", desc: "Entering assigned sector.", phrasing: "Control, entering zone.", tip: "Log sector entry." },
+            { code: "10-61", title: "Service Needed — Vehicle / Vessel", desc: "Requesting mechanical service for unit.", phrasing: "Control, service needed for patrol vehicle.", tip: "Arrange maintenance." },
+            { code: "10-62", title: "Aircraft Assignment", desc: "Aviation unit deployment.", phrasing: "Control, aircraft assignment active.", tip: "Coordinate air support." },
+            { code: "10-63", title: "Request For (Specify)", desc: "General specialized request.", phrasing: "Control, request for specialized unit.", tip: "Specify type." },
+            { code: "10-63B", title: "Request for Chemical Test", desc: "Requesting chemical testing unit.", phrasing: "Control, request for chemical test.", tip: "Prepare breathalyzer." },
+            { code: "10-63F", title: "Request for Plane or Helicopter", desc: "Requesting aviation support.", phrasing: "Control, request for plane or helicopter.", tip: "Provide coordinates." },
+            { code: "10-63K", title: "Request Canine Unit", desc: "Requesting K9 unit deployment.", phrasing: "Control, request canine unit to scene.", tip: "Establish containment." },
+            { code: "10-63P", title: "Request For Perimeter", desc: "Requesting units to lock down perimeter.", phrasing: "Control, request for perimeter units.", tip: "Assign sectors." },
+            { code: "10-63S", title: "Request For SRT", desc: "Requesting Special Response Team.", phrasing: "Control, request for SRT deployment.", tip: "Contain area." },
+            { code: "10-64", title: "Radio Net Free", desc: "Radio channel is clear.", phrasing: "Control, radio net free.", tip: "Resume routine traffic." },
+            { code: "10-65", title: "Can You Copy?", desc: "Inquiring if transmission is legible.", phrasing: "Control, can you copy?", tip: "Confirm signal." },
+            { code: "10-66", title: "Cancel", desc: "Cancel assignment.", phrasing: "Control, cancel previous call.", tip: "Clear units." },
+            { code: "10-67", title: "Driver / Operator License or Equipment Check", desc: "Checking license or gear.", phrasing: "Control, conducting equipment check.", tip: "Inspect gear." },
+            { code: "10-68", title: "Agency Meeting", desc: "Attending agency meeting.", phrasing: "Control, attending agency meeting.", tip: "Log out temporarily." },
+            { code: "10-69", title: "Fire Truck", desc: "Fire department dispatch request.", phrasing: "Control, dispatch fire truck.", tip: "Coordinate EMS." },
+            { code: "10-70", title: "Send Wrecker / Tow Boat (Specify Class)", desc: "Requesting tow service.", phrasing: "Control, send wrecker / tow boat.", tip: "Specify vehicle size." },
+            { code: "10-71", title: "Send Ambulance", desc: "Requesting medical transport.", phrasing: "Control, send ambulance.", tip: "Clear path." },
+            { code: "10-76", title: "Switch to Channel ______", desc: "Instructions to change radio channel.", phrasing: "Control, switch to channel 2.", tip: "Confirm channel change." },
+            { code: "10-77", title: "Request Traffic / Boating Homicide Investigator", desc: "Requesting fatal crash investigators.", phrasing: "Control, request traffic / boating homicide investigator.", tip: "Secure accident scene." },
+            { code: "10-78", title: "Notification of Next of Kin", desc: "Informing family of emergency or death.", phrasing: "Control, handling notification of next of kin.", tip: "Handle with sensitivity." },
+            { code: "10-83", title: "Meet for Work Break", desc: "Rendezvous for break.", phrasing: "Control, meeting for work break.", tip: "Remain available." },
+            { code: "10-88", title: "At What Phone Can ____ Be Reached?", desc: "Inquiring about contact phone.", phrasing: "Control, at what phone can party be reached?", tip: "Note number." },
+            { code: "10-94", title: "REQUEST ROUTINE BACKUP", desc: "Requesting non-emergency backup unit.", phrasing: "Control, request routine backup.", tip: "State reason." },
+            { code: "10-97", title: "Arrived At Scene", desc: "Reached call location.", phrasing: "Control, arrived at scene.", tip: "Assess safety." },
+            { code: "10-98", title: "Completed Assignment", desc: "Finished call and clear.", phrasing: "Control, completed assignment, back in service.", tip: "Log disposition." },
+            { code: "10-99", title: "Unable to Receive Your Signal", desc: "Radio signal unreadable.", phrasing: "Control, unable to receive your signal.", tip: "Relocate." },
+            { code: "10-100", title: "ALERT STATUS / REMAIN IN CONTACT (SPECIFY)", desc: "Placing units on alert status.", phrasing: "Control, alert status active.", tip: "Monitor radio closely." },
+            { code: "10-155", title: "Private / Individual Call — Via 800 MHz Radio", desc: "Direct private radio call.", phrasing: "Control, private call via 800 MHz radio.", tip: "Use secure frequency." }
+        ];
+
+        const signalsData = [
+            { code: "S0", title: "Armed and/or Caution", desc: "Subject or scene involves weapons or caution status." },
+            { code: "S1", title: "DUI - Vehicle", desc: "Driving under the influence involving a motor vehicle." },
+            { code: "S1B", title: "BUI - Boat", desc: "Boating under the influence." },
+            { code: "S1J", title: "DUI - Juvenile", desc: "Driving under the influence involving a juvenile." },
+            { code: "S2", title: "Drunk Pedestrian", desc: "Intoxicated pedestrian creating hazard or disturbance." },
+            { code: "S3", title: "Hit and Run Crash", desc: "Traffic crash with fleeing vehicle or driver." },
+            { code: "S3B", title: "Hit and Run Crash - Boat", desc: "Boating collision with fleeing vessel." },
+            { code: "S3I", title: "Hit and Run Crash w/injuries", desc: "Hit and run traffic crash resulting in personal injuries." },
+            { code: "S3P", title: "Hit and Run Crash - Patrol Vehicle", desc: "Hit and run incident involving an MDSO patrol cruiser." },
+            { code: "S3R", title: "Hit and Run Crash w/roadblock", desc: "Hit and run incident requiring roadblock deployment." },
+            { code: "S4", title: "Vehicle Crash", desc: "Standard motor vehicle traffic accident." },
+            { code: "S4A", title: "Aircraft Crash - Land", desc: "Aircraft accident on land." },
+            { code: "S4AW", title: "Aircraft Crash - Water", desc: "Aircraft accident in water body." },
+            { code: "S4B", title: "Boating Crash", desc: "Vessel collision or crash." },
+            { code: "S4I", title: "Vehicle Crash w/injuries", desc: "Motor vehicle accident with reported injuries." },
+            { code: "S4P", title: "Patrol Car Crash", desc: "Collision involving an MDSO patrol vehicle." },
+            { code: "S4R", title: "Vehicle Crash w/roadblock", desc: "Vehicle crash requiring emergency roadway roadblock." },
+            { code: "S7", title: "Fatality", desc: "Incident resulting in human fatality." },
+            { code: "S7B", title: "Boating Crash w/fatality", desc: "Boating accident resulting in fatality." },
+            { code: "S7P", title: "Possible Fatality", desc: "Reported fatality pending confirmation on scene." },
+            { code: "S8", title: "Missing Person", desc: "Report of a missing person requiring investigation." },
+            { code: "S9", title: "Lost/Stolen Tag", desc: "Report of a lost or stolen license plate." },
+            { code: "S10", title: "Stolen Vehicle", desc: "Motor vehicle theft report." },
+            { code: "S10A", title: "Attempted Auto Theft", desc: "Attempted theft of a motor vehicle." },
+            { code: "S10B", title: "Stolen Boat", desc: "Theft of watercraft or boat." },
+            { code: "S10J", title: "Car Jacking", desc: "Robbery of a motor vehicle by force or intimidation." },
+            { code: "S10R", title: "Stolen Vehicle Recovery", desc: "Recovery of a previously reported stolen vehicle." },
+            { code: "S11", title: "Abandoned Vehicle", desc: "Unattended or abandoned motor vehicle." },
+            { code: "S11B", title: "Abandoned Boat", desc: "Unattended or derelict watercraft." },
+            { code: "S11R", title: "Abandoned Vehicle w/roadblock", desc: "Abandoned vehicle creating traffic roadblock hazard." },
+            { code: "S12", title: "Reckless Vehicle", desc: "Reckless or erratic driving behavior." },
+            { code: "S12B", title: "Reckless Boat", desc: "Reckless vessel operation on waterways." },
+            { code: "S13", title: "Suspicious (Specify)", desc: "Suspicious incident requiring investigation." },
+            { code: "S13B", title: "Suspicious Boat", desc: "Suspicious watercraft activity." },
+            { code: "S13P", title: "Suspicious Person", desc: "Suspicious individual observed." },
+            { code: "S13V", title: "Suspicious Vehicle", desc: "Suspicious motor vehicle stationary or moving." },
+            { code: "S14", title: "Information", desc: "General information broadcast or report." },
+            { code: "S14I", title: "Intelligence", desc: "Tactical or investigative intelligence report." },
+            { code: "S14S", title: "Sealed by Court Order", desc: "Records or information sealed per court directive." },
+            { code: "S14T", title: "Information TIP Line", desc: "Tip line report or lead." },
+            { code: "S15", title: "Special Detail", desc: "Special assigned law enforcement detail." },
+            { code: "S15C", title: "Special Detail (Criminal Interview)", desc: "Criminal interview detail." },
+            { code: "S15NC", title: "Special Detail (Noncriminal Interview)", desc: "Non-criminal interview detail." },
+            { code: "S15M", title: "Special Detail (Move Over Law)", desc: "Enforcement detail regarding Move Over law." },
+            { code: "S15P", title: "Special Detail (Polygraph Examination)", desc: "Polygraph test administration detail." },
+            { code: "S16", title: "Obstruction on Highway", desc: "Roadway obstruction hazard." },
+            { code: "S16C", title: "Construction", desc: "Roadway construction zone hazard." },
+            { code: "S16D", title: "Roadway Debris/Object", desc: "Debris or object blocking roadway." },
+            { code: "S16F", title: "Roadway closed due to Fog", desc: "Visibility hazard closure due to heavy fog." },
+            { code: "S16O", title: "Roadway closed due to other conditions", desc: "Road closure due to miscellaneous conditions." },
+            { code: "S16S", title: "Roadway closed due to Smoke", desc: "Road closure due to heavy smoke." },
+            { code: "S16T", title: "Traffic Light Out", malfunctioning: true, desc: "Traffic signal malfunction or power failure." },
+            { code: "S16W", title: "Roadway closed due to Water", desc: "Road closure due to flooding or standing water." },
+            { code: "S18", title: "Felony", desc: "General felony crime report." },
+            { code: "S19", title: "Misdemeanor", desc: "General misdemeanor crime report." },
+            { code: "S20", title: "Mentally Ill Person", desc: "Individual experiencing mental health crisis or Baker Act situation." },
+            { code: "S21", title: "Burglary", desc: "Unlawful entry of a structure with intent to commit a crime." },
+            { code: "S21C", title: "Burglary to Conveyance", desc: "Break-in or burglary of a vehicle or vessel." },
+            { code: "S22", title: "Disturbance/Disorder", desc: "Verbal or physical public disturbance." },
+            { code: "S22D", title: "Domestic Violence", desc: "Domestic dispute or violence incident." },
+            { code: "S22H", title: "Highway Violence/Road Rage", desc: "Road rage or violent incident occurring on roadway." },
+            { code: "S22I", title: "Injunction", desc: "Violation or service of court injunction/restraining order." },
+            { code: "S23", title: "Pedestrian/Hitchhiker", desc: "Pedestrian or hitchhiker on restricted roadway." },
+            { code: "S24", title: "Robbery", desc: "Theft by force or sudden snatching." },
+            { code: "S24S", title: "Strong Arm Robbery", desc: "Robbery utilizing physical force without weapons." },
+            { code: "S27", title: "Theft/Larceny", desc: "General theft or larceny complaint." },
+            { code: "S28", title: "Malicious Mischief/Vandalism", desc: "Property destruction or vandalism." },
+            { code: "S29", title: "Boating Incident (Specify)", desc: "General boating or marine incident." },
+            { code: "S29A", title: "At Risk Vessel", desc: "Vessel in distress or at risk." },
+            { code: "S29D", title: "Derelict Boat", desc: "Abandoned or derelict vessel." },
+            { code: "S29G", title: "Grounded Boat", desc: "Vessel grounded on shoal or shore." },
+            { code: "S29I", title: "Boating Inspection", desc: "Marine safety inspection." },
+            { code: "S29L", title: "Livery Safety Inspection", desc: "Rental vessel livery safety inspection." },
+            { code: "S29N", title: "Navigational Hazard", desc: "Hazard to navigation on waterways." },
+            { code: "S30", title: "Shooting", desc: "Report of shots fired or person shot." },
+            { code: "S31", title: "Kidnapping", desc: "Abduction or unlawful confinement." },
+            { code: "S32", title: "Assault", desc: "Threat of imminent violence." },
+            { code: "S32P", title: "Threat to Public Official", desc: "Threat directed at a public official." },
+            { code: "S33", title: "Battery", desc: "Unlawful physical contact or strike." },
+            { code: "S34", title: "Sex Offense (Specify)", desc: "Sexual offense complaint." },
+            { code: "S35", title: "Destruction of State Property (Specify)", desc: "Vandalism or damage to state/county property." },
+            { code: "S36", title: "Trespassing", desc: "Unlawful intrusion on property." },
+            { code: "S37", title: "Drug/Contraband Case", desc: "Narcotics violation or contraband seizure." },
+            { code: "S38", title: "Police Roadblock", desc: "Law enforcement roadblock establishment." },
+            { code: "S38X", title: "Police Roadblock - Simulated", desc: "Training simulation roadblock." },
+            { code: "S39C", title: "Close Gate/Door (Specify)", desc: "Request to secure gate or door." },
+            { code: "S39O", title: "Open Gate/Door (Specify)", desc: "Report of unsecured gate or door." },
+            { code: "S40", title: "Callbox Request", desc: "Emergency callbox activation." },
+            { code: "S40M", title: "Callbox Request - Medical", desc: "Medical emergency via callbox." },
+            { code: "S40P", title: "Callbox Request - Police", desc: "Police assistance via callbox." },
+            { code: "S40S", title: "Callbox Request - Service Call", desc: "General service request via callbox." },
+            { code: "S41", title: "Sick/Injured Person", desc: "Medical call for sick or injured civilian." },
+            { code: "S41A", title: "Possible AIDS", desc: "Medical incident with exposure hazard precautions." },
+            { code: "S42", title: "Assist Other Agency (Specify)", desc: "Inter-agency mutual aid assistance." },
+            { code: "S42F", title: "Assist Other Troop with Fatality", desc: "Fatality assistance support." },
+            { code: "S42N", title: "Notification Of Next Of Kin", desc: "Death or emergency next of kin notification." },
+            { code: "S43", title: "Assist Public", desc: "General public assistance call." },
+            { code: "S44", title: "Suicide", desc: "Suicide attempt or completed suicide incident." },
+            { code: "S45", title: "Officer Down", desc: "Critical emergency: Officer injured or incapacitated." },
+            { code: "S46", title: "Relay (Specify)", desc: "Emergency relay of documents, blood, or items." },
+            { code: "S47", title: "Bomb Threat", desc: "Bomb threat received." },
+            { code: "S47D", title: "Bomb Disposal", desc: "Bomb squad disposal operation." },
+            { code: "S47R", title: "Request for EOD", desc: "Explosive Ordnance Disposal team request." },
+            { code: "S47N", title: "Secondary Radiological Screening", desc: "Radiological screening protocol." },
+            { code: "S48", title: "Explosion", desc: "Explosion incident report." },
+            { code: "S49", title: "Prowler/Stalker", desc: "Prowler on property or stalking complaint." },
+            { code: "S51", title: "Juvenile Offense", desc: "Offense committed by a juvenile." },
+            { code: "S51A", title: "Juvenile Alcohol Offense", desc: "Underage alcohol violation." },
+            { code: "S51T", title: "Juvenile Tobacco Offense", desc: "Underage tobacco violation." },
+            { code: "S52", title: "Child Abuse/Molestation", desc: "Child abuse or neglect investigation." },
+            { code: "S53", title: "Smuggling (Specify)", desc: "Smuggling contraband or goods." },
+            { code: "S53A", title: "Illegal Aliens", desc: "Undocumented migrant or alien smuggling." },
+            { code: "S53B", title: "Alcoholic Beverages", desc: "Illegal alcohol trafficking." },
+            { code: "S53C", title: "Cigarettes", desc: "Contraband cigarette smuggling." },
+            { code: "S53E", title: "Endangered/Threatened Species", desc: "Smuggling protected wildlife." },
+            { code: "S53F", title: "Food or other Illegal AG Product", desc: "Illegal agricultural product smuggling." },
+            { code: "S53M", title: "Marine Species (Protected)", desc: "Protected marine species trafficking." },
+            { code: "S53N", title: "Narcotics", desc: "Narcotics smuggling operation." },
+            { code: "S53P", title: "Protected Wildlife", desc: "Protected wildlife trafficking." },
+            { code: "S53W", title: "Weapons", desc: "Illegal weapons smuggling." },
+            { code: "S54", title: "Parking Complaint", desc: "Illegal or blocking parking violation." },
+            { code: "S55", title: "Incident (Specify)", desc: "General miscellaneous incident." },
+            { code: "S55A", title: "Amber Alert (Endangered Child)", desc: "Active Amber Alert broadcast for abducted child." },
+            { code: "S55B", title: "Blue Alert", desc: "Active Blue Alert for violent offender targeting law enforcement." },
+            { code: "S55P", title: "Recovered/Found Property", desc: "Found property recovery." },
+            { code: "S55R", title: "Rock Throwing", desc: "Throwing rocks at vehicles or persons." },
+            { code: "S55S", title: "Silver Alert (Endangered Adult)", desc: "Active Silver Alert for missing endangered senior." },
+            { code: "S55T", title: "Telephone Harassment", desc: "Harassing telephone calls." },
+            { code: "S55H", title: "HAZMAT Incident", desc: "Hazardous materials spill or threat." },
+            { code: "S56", title: "Animal Call", desc: "Domestic or wild animal complaint." },
+            { code: "S57", title: "Impersonating an Officer", desc: "Individual falsely posing as law enforcement." },
+            { code: "S58", title: "Fraud (Specify)", desc: "Fraud or scam investigation." },
+            { code: "S59", title: "Injuries", desc: "General injury report." },
+            { code: "S60A", title: "Wildlife Attack", desc: "Wild animal attack on human or pet." },
+            { code: "S60E", title: "Wildlife Escape", desc: "Captive wildlife escape incident." },
+            { code: "S61", title: "Past Criminal History", desc: "Subject prior criminal record check." },
+            { code: "S61F", title: "Past History Felony", desc: "Prior felony convictions on record." },
+            { code: "S61M", title: "Past History Misdemeanor", desc: "Prior misdemeanor convictions on record." },
+            { code: "S61V", title: "Past History Violence", desc: "Prior history of violent offenses." },
+            { code: "S62", title: "Saltwater Species (Specify)", desc: "Saltwater fishing/species violation." },
+            { code: "S62A", title: "Amberjack", desc: "Amberjack species regulation case." },
+            { code: "S62C", title: "Coral/Live Rock", desc: "Coral or live rock protection violation." },
+            { code: "S62D", title: "Drum (Red/Black)", desc: "Red or black drum fish violation." },
+            { code: "S62F", title: "Flounder", desc: "Flounder fishing regulation case." },
+            { code: "S62G", title: "Goliath Grouper", desc: "Goliath grouper protected species case." },
+            { code: "S62I", title: "Illegal Sale of Fish", desc: "Illegal commercial sale of fish." },
+            { code: "S62K", title: "Fish Kill (Saltwater)", desc: "Saltwater fish kill environmental report." },
+            { code: "S62M", title: "Mackerel", desc: "Mackerel fishing regulation case." },
+            { code: "S62N", title: "Nassau Grouper", desc: "Nassau grouper protection violation." },
+            { code: "S62P", title: "Pompano", desc: "Pompano fishing regulation case." },
+            { code: "S62R", title: "Redfish", desc: "Redfish bag limit violation." },
+            { code: "S62S", title: "Starfish (Bahamian)", desc: "Bahamian starfish regulation case." },
+            { code: "S62SG", title: "Snapper/Grouper", desc: "Snapper or grouper complex violation." },
+            { code: "S62SH", title: "Shark", desc: "Shark fishing or finning violation." },
+            { code: "S62SN", title: "Snook", desc: "Snook season or bag limit violation." },
+            { code: "S62SP", title: "Sponges", desc: "Sponge harvesting regulation case." },
+            { code: "S62T", title: "Tarpon", desc: "Tarpon tag or catch-and-release violation." },
+            { code: "S62TF", title: "Tropical Fish", desc: "Tropical fish collection violation." },
+            { code: "S62TR", title: "Trout", desc: "Trout fishing regulation case." },
+            { code: "S63", title: "Marine Animals (Specify)", desc: "Marine mammal protection case." },
+            { code: "S63D", title: "Dolphin (Porpoise)", desc: "Dolphin harassment or harm violation." },
+            { code: "S63M", title: "Manatee", desc: "Manatee protection zone or strike violation." },
+            { code: "S63T", title: "Sea Turtle (Loggerhead...)", desc: "Sea turtle nest or animal violation." },
+            { code: "S63W", title: "Whale", desc: "Whale protection case." },
+            { code: "S64", title: "Shellfish (Specify)", desc: "Shellfish harvesting violation." },
+            { code: "S64B", title: "Blue Crab", desc: "Blue crab trap or catch violation." },
+            { code: "S64C", title: "Clams", desc: "Clam harvesting violation." },
+            { code: "S64L", title: "Lobster (Spiny/Crawfish)", desc: "Spiny lobster season or undersize violation." },
+            { code: "S64O", title: "Oysters", desc: "Oyster harvesting violation." },
+            { code: "S64Q", title: "Queen Conch", desc: "Queen conch protection violation." },
+            { code: "S64S", title: "Scallops", desc: "Scallop season or bag limit violation." },
+            { code: "S64SH", title: "Shrimp", desc: "Shrimp trawling or net violation." },
+            { code: "S64X", title: "Stone Crab", desc: "Stone crab claw or trap violation." },
+            { code: "S65", title: "FWC Inspections (Specify)", desc: "Fish and Wildlife Conservation Commission inspection." },
+            { code: "S65A", title: "Alligator Farms", desc: "Alligator farm facility inspection." },
+            { code: "S65D", title: "Wildlife Dealer/Broker", desc: "Wildlife dealer license inspection." },
+            { code: "S65F", title: "Falconry", desc: "Falconry permit inspection." },
+            { code: "S65N", title: "Non-Venomous Reptiles", desc: "Non-venomous reptile facility check." },
+            { code: "S65P", title: "Personal Pets", desc: "Personal pet wildlife permit check." },
+            { code: "S65QD", title: "Quality Control Seafood Dealers", desc: "Seafood dealer quality control inspection." },
+            { code: "S65QT", title: "Quality Control Seafood Transport", desc: "Seafood transport quality inspection." },
+            { code: "S65R", title: "Rehab (Wildlife)", desc: "Wildlife rehabilitation facility inspection." },
+            { code: "S65S", title: "Pet Stores", desc: "Pet store wildlife compliance check." },
+            { code: "S65T", title: "Traveling Exhibits", desc: "Traveling wildlife exhibit inspection." },
+            { code: "S65V", title: "Venomous Reptiles", desc: "Venomous reptile permit/facility inspection." },
+            { code: "S65W", title: "Wildlife Exhibits", desc: "Permanent wildlife exhibit inspection." },
+            { code: "S66", title: "FWC Licenses/Gear (Specify)", desc: "Fishing/hunting license or gear check." },
+            { code: "S66CF", title: "Commercial Freshwater License", desc: "Commercial freshwater license check." },
+            { code: "S66D", title: "Deer Depredation Permit", desc: "Deer depredation permit check." },
+            { code: "S66CS", title: "Commercial Saltwater License", desc: "Commercial saltwater license check." },
+            { code: "S66H", title: "Hunting License", desc: "Hunting license and stamp check." },
+            { code: "S66RF", title: "Recreational Freshwater License", desc: "Recreational freshwater license check." },
+            { code: "S66RS", title: "Recreational Saltwater License", desc: "Recreational saltwater license check." },
+            { code: "S66S", title: "Special Activity License/Permit", desc: "Special activity permit check." },
+            { code: "S66W", title: "Wholesale/Retail Dealer", desc: "Wholesale/retail seafood dealer license check." },
+            { code: "S67", title: "Freshwater Species (Specify)", desc: "Freshwater fishing violation." },
+            { code: "S67B", title: "Bass", desc: "Black bass bag/size limit violation." },
+            { code: "S67BR", title: "Bream", desc: "Bream fishing violation." },
+            { code: "S67C", title: "Catfish", desc: "Catfish harvesting violation." },
+            { code: "S67CR", title: "Crappie", desc: "Crappie bag limit violation." },
+            { code: "S67E", title: "Exotics", desc: "Exotic freshwater species violation." },
+            { code: "S67K", title: "Fish Kill (Freshwater)", desc: "Freshwater fish kill environmental report." },
+            { code: "S67P", title: "Panfish", desc: "Panfish fishing violation." },
+            { code: "S68", title: "Hunting (Specify)", desc: "Hunting regulation violation." },
+            { code: "S68A", title: "Hunting Accident", desc: "Hunting-related firearm/bow accident." },
+            { code: "S68B", title: "Baited Field or Blind", desc: "Hunting over bait violation." },
+            { code: "S68C", title: "Hunting/Closed Season", desc: "Hunting out of established season." },
+            { code: "S68D", title: "Deer Hunting", desc: "Deer hunting regulation violation." },
+            { code: "S68G", title: "Small Game Hunting", desc: "Small game hunting violation." },
+            { code: "S68GB", title: "Game Bird Hunting", desc: "Game bird hunting violation." },
+            { code: "S68H", title: "Dog Hunter Responsibility", desc: "Hunting dog tracking/trespass violation." },
+            { code: "S68M", title: "Hunting Migratory Water Fowl", desc: "Migratory waterfowl hunting violation." },
+            { code: "S68N", title: "Night Hunting (Specify)", desc: "Illegal hunting during nighttime hours." },
+            { code: "S68O", title: "Other Migratory Birds", desc: "Non-waterfowl migratory bird violation." },
+            { code: "S68R", title: "Road Hunting", desc: "Shooting from or across public roadway." },
+            { code: "S68S", title: "Shots Fired (Hunting Related)", desc: "Shots fired report in hunting area." },
+            { code: "S68T", title: "Turkey Hunting", desc: "Wild turkey hunting violation." },
+            { code: "S69", title: "Wildlife (Specify)", desc: "General wildlife violation." },
+            { code: "S69A", title: "Alligator", desc: "Alligator poaching or nuisance alligator call." },
+            { code: "S69B", title: "Bear", desc: "Black bear encounter or violation." },
+            { code: "S69BD", title: "Bird (Specify)", desc: "Protected bird violation." },
+            { code: "S69C", title: "Crocodile", desc: "American crocodile protection case." },
+            { code: "S69CY", title: "Coyote", desc: "Coyote sighting or complaint." },
+            { code: "S69D", title: "Deer", desc: "Illegal deer poaching." },
+            { code: "S69E", title: "Bald Eagle", desc: "Bald eagle protection violation." },
+            { code: "S69G", title: "Gopher Tortoise", desc: "Gopher tortoise burrow or animal violation." },
+            { code: "S69I", title: "Illegal Trapping Game", desc: "Illegal trapping of game animals." },
+            { code: "S69IS", title: "Illegal Sale of Wildlife", desc: "Illegal commercial sale of wildlife." },
+            { code: "S69O", title: "Owl", desc: "Protected owl violation." },
+            { code: "S69P", title: "Panther", desc: "Florida panther sighting, strike, or violation." },
+            { code: "S69S", title: "Snake", desc: "Venomous or exotic snake violation." },
+            { code: "S69T", title: "Turtle", desc: "Terrestrial turtle violation." },
+            { code: "S70", title: "Gambling", desc: "Illegal gambling operation." },
+            { code: "S71", title: "Prostitution", desc: "Prostitution or solicitation offense." },
+            { code: "S72", title: "Engage Secured (Communications)", desc: "Securing communications channel or encryption." },
+            { code: "S73", title: "Disengage Secured (Communications)", desc: "Returning communications channel to standard unencrypted mode." },
+            { code: "S74", title: "Informant", desc: "Confidential informant contact or meeting." },
+            { code: "S75", title: "Search and Rescue (Specify)", desc: "Search and rescue operation." },
+            { code: "S75B", title: "Boat in Distress / Mayday", desc: "Vessel transmitting Mayday or in distress." },
+            { code: "S75D", title: "Drowning", desc: "Drowning or submerged person rescue." },
+            { code: "S75E", title: "EPIRB", desc: "Emergency Position-Indicating Radiobeacon activation." },
+            { code: "S75F", title: "Flare Sighting", desc: "Emergency distress flare sighting report." },
+            { code: "S75L", title: "Search and Rescue/Land", desc: "Land-based search and rescue operation." },
+            { code: "S75O", title: "Overdue Boat", desc: "Overdue vessel search operation." },
+            { code: "S75P", title: "Person/Swimmer/Diver Emergency", desc: "Swimmer or diver in distress." },
+            { code: "S76", title: "Disabled Vehicle", desc: "Disabled motor vehicle on roadway." },
+            { code: "S76B", title: "Disabled Boat", desc: "Disabled watercraft on waterway." },
+            { code: "S76P", title: "Disabled Patrol Car", desc: "Disabled MDSO patrol vehicle." },
+            { code: "S76R", title: "Disabled Vehicle in Roadway", desc: "Disabled vehicle blocking active traffic lane." },
+            { code: "S77", title: "Weapons Violation", desc: "Unlawful firearm or weapon possession/discharge." },
+            { code: "S78", title: "Bribery", desc: "Bribery or corruption offense." },
+            { code: "S79", title: "All Terrain Vehicle (ATV) Violation", desc: "Illegal ATV or off-road vehicle operation." },
+            { code: "S80", title: "Security Check", desc: "Routine security check of area or facility." },
+            { code: "S80A", title: "Additional Patrol Requested", desc: "Citizen or business requested extra patrol attention." },
+            { code: "S80D", title: "Open Door Complaint", desc: "Security check revealing open door or window." },
+            { code: "S80G", title: "Security Check (Grounds)", desc: "Security check of exterior grounds." },
+            { code: "S80L", title: "Security Check (Driver's License Office Only)", desc: "Driver's license facility security check." },
+            { code: "S80P", title: "Security Check (State parks)", desc: "State park security patrol." },
+            { code: "S80R", title: "Security Check (Ranges)", desc: "Firing range security check." },
+            { code: "S80S", title: "Security Check (Structure)", desc: "Interior building security check." },
+            { code: "S80V", title: "Security Check (Vehicle)", desc: "Vehicle compound security check." },
+            { code: "S80W", title: "Security Check (Drinking Water Wells)", desc: "Municipal drinking water well security check." },
+            { code: "S83", title: "Operation Safe Place Call", desc: "Operation Safe Place community check-in." },
+            { code: "S87", title: "Trap Incident (Specify)", desc: "Commercial fish/crab trap violation." },
+            { code: "S87F", title: "Fish Traps", desc: "Illegal fish trap violation." },
+            { code: "S87R", title: "Trap Robbing/Molesting", desc: "Robbing or tampering with commercial traps." },
+            { code: "S87T", title: "Trap Tag Incident", desc: "Trap tag numbering/identification violation." },
+            { code: "S88", title: "Dive Incident (Specify)", desc: "SCUBA diving accident or violation." },
+            { code: "S88A", title: "Diving Accident", desc: "Diving medical emergency or accident." },
+            { code: "S88C", title: "Diver in Channel", desc: "Diver operating in navigational channel hazard." },
+            { code: "S88F", title: "Dive Flag Violation", desc: "Failure to display divers-down flag." },
+            { code: "S88P", title: "Possession of Speargun (Specify)", desc: "Speargun possession regulation check." },
+            { code: "S88S", title: "Spear Fishing", desc: "Spearfishing regulation violation." },
+            { code: "S89", title: "Net Incident (Specify)", desc: "Illegal net fishing or entanglement." },
+            { code: "S90", title: "Alcohol Violation (Specify)", desc: "Open container or alcoholic beverage violation." },
+            { code: "S91", title: "Environmental (Specify)", desc: "Environmental pollution or protection violation." },
+            { code: "S91A", title: "Air Program (burn/pollutant/Asbestos)", desc: "Air pollution or illegal burning violation." },
+            { code: "S91C", title: "Cutting Plant/Logging", desc: "Illegal plant cutting or logging violation." },
+            { code: "S91D", title: "Domestic Waste (Sewage)", desc: "Sewage dumping or domestic waste violation." },
+            { code: "S91F", title: "Dredge and Fill", desc: "Unauthorized dredging or filling of wetlands." },
+            { code: "S91I", title: "Industrial Waste", desc: "Industrial waste dumping violation." },
+            { code: "S91L", title: "Littering", desc: "Illegal dumping or littering complaint." },
+            { code: "S91M", title: "Mangrove Cutting", desc: "Protected mangrove trimming/cutting violation." },
+            { code: "S91N", title: "Natural Features Violation (Specify)", desc: "Alteration of natural geological features." },
+            { code: "S91O", title: "Oil/Pollutant Spill", desc: "Oil or hazardous pollutant spill in waterways/land." },
+            { code: "S91P", title: "Potable Waste", desc: "Potable water waste violation." },
+            { code: "S91S", title: "Shoreline Alteration", desc: "Unauthorized shoreline construction/alteration." },
+            { code: "S91T", title: "Tank Program", desc: "Storage tank environmental compliance." },
+            { code: "S91U", title: "Unknown Containerized Substance", desc: "Discovery of unknown hazardous container." },
+            { code: "S91V", title: "Clean Vessel Act (MSD...)", desc: "Marine sanitation device compliance check." },
+            { code: "S92", title: "Inappropriate/Unlawful Attire", desc: "Public attire or nudity violation." },
+            { code: "S93", title: "Bones/Artifacts", desc: "Discovery of human skeletal remains or historical artifacts." },
+            { code: "S94", title: "Dune Driving", desc: "Illegal motor vehicle driving on coastal dunes." },
+            { code: "S95", title: "Plant/Animal Violation", desc: "General protected plant or animal violation." },
+            { code: "S96", title: "Evasion of Fees", desc: "Evasion of tolls, park entry fees, or boat ramp fees." },
+            { code: "S97", title: "Illegal Camping", desc: "Unlawful camping on public property or parks." },
+            { code: "S98", title: "Destruction of Mounds", desc: "Destruction of historical Indian mounds or markers." },
+            { code: "S99", title: "Possible Computer Hit - Unconfirmed", desc: "Database query return pending confirmation." },
+            { code: "S99C", title: "Confirmed Computer Hit", desc: "Confirmed wanted warrant or stolen record hit." },
+            { code: "ATL", title: "Attempt To Locate", desc: "Broadcast request to attempt to locate person or vehicle." },
+            { code: "BOLO", title: "BOLO", desc: "Be On the Lookout emergency broadcast." }
+        ];
+
+        const channelsData = [
+            { ch: "Channel 1", title: "Regular Patrol", desc: "Primary dispatch channel for daily patrol operations, routine calls, and standard radio traffic." },
+            { ch: "Channel 2", title: "Supervisor Channel", desc: "Restricted channel for On-Duty Supervisors, Sergeants (SGT), and Lieutenants (LT) only." },
+            { ch: "Channel 3", title: "SRT (Special Response Team)", desc: "Tactical operations channel for high-risk warrants, barricaded subjects, and tactical deployments." },
+            { ch: "Channel 4", title: "Fugitive Warrant Bureau", desc: "Dedicated channel for tracking, locating, and apprehending fugitive warrant suspects." },
+            { ch: "Channel 5", title: "Criminal Investigations Division", desc: "Detective and investigator channel for ongoing casework, interviews, and undercover ops." },
+            { ch: "Channel 6", title: "Command & Higher-ups", desc: "Executive channel for Command Staff, Captains, and Department leadership." }
+        ];
+
+        const responseCodesData = [
+            { code: "Code 1", title: "No Lights or Sirens", desc: "Used for routine calls where speed is not required. Deputies check the situation calmly." },
+            { code: "Code 2", title: "Lights Only (No Sirens)", desc: "Used to arrive quickly without tipping off the suspect or suspects in the area." },
+            { code: "Code 3", title: "Lights & Sirens", desc: "Emergency response. Both lights and sirens activated as fast as possible to the scene." },
+            { code: "Code 4", title: "Suspect in Custody / Scene Clear", desc: "Indicates the situation is stabilized, suspect is secured, and no additional emergency units are required." },
+            { code: "Code 33", title: "Officer in Immediate Danger", desc: "All units drop everything and immediately respond to assist the officer in critical distress." }
+        ];
+
+        const forceLevelsData = [
+            { level: "Level 1", title: "Officer Presence & Verbal Direction", desc: "Professional law enforcement presence, commands, and clear instructions to establish control." },
+            { level: "Level 2", title: "Soft Empty Hand Control / Compliance Holds", desc: "Escort holds, joint locks, and pressure points to overcome passive resistance." },
+            { level: "Level 3", title: "Hard Empty Hand Control / Strikes", desc: "Punches, kicks, and takedowns utilized against active physical resistance." },
+            { level: "Level 4", title: "Intermediate Weapons (Taser / OC Spray / Baton)", desc: "Deployment of non-lethal tools such as electronic control weapons, pepper spray, or impact batons." },
+            { level: "Level 5", title: "Lethal Force", desc: "Discharge of firearms or employment of deadly force reserved strictly for imminent threat of death or great bodily harm." }
+        ];
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderCodes();
+            renderSignals();
+            renderChannels();
+            renderResponseCodes();
+            renderForceLevels();
+        });
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = 'tab-btn px-3.5 py-2 rounded-md bg-mdso-black border border-mdso-border text-slate-300 hover:bg-mdso-hover whitespace-nowrap transition cursor-pointer mono flex items-center gap-2';
+            });
+            document.getElementById(`btn-${tabId}`).className = 'tab-btn px-3.5 py-2 rounded-md bg-amber-500 text-black font-bold whitespace-nowrap transition cursor-pointer mono flex items-center gap-2 shadow-md';
+        }
+
+        function filterCodes() {
+            renderCodes();
+        }
+
+        function filterSignals() {
+            renderSignals();
+        }
+
+        function renderCodes() {
+            const grid = document.getElementById('codesGrid');
+            const searchTerm = document.getElementById('searchCodes').value.toLowerCase();
+
+            grid.innerHTML = '';
+
+            const filtered = codesData.filter(item => {
+                return item.code.toLowerCase().includes(searchTerm) || item.title.toLowerCase().includes(searchTerm) || item.desc.toLowerCase().includes(searchTerm);
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-8 text-mdso-dim text-xs mono">NO 10-CODES FOUND MATCHING YOUR SEARCH.</div>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'bg-mdso-black border border-mdso-border rounded-lg p-3.5 flex flex-col justify-between shadow-sm hover:border-amber-500/60 transition cursor-pointer group relative';
+                div.onclick = () => openModal(item.code, item.title, item.desc, item.phrasing, item.tip, '10-Code');
+                div.innerHTML = `
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="mono font-bold text-amber-400 text-sm group-hover:underline flex items-center gap-1.5">
+                            ${item.code} <i class="fa-solid fa-circle-info text-[10px] text-amber-500 opacity-70"></i>
+                        </span>
+                        <span class="text-[10px] px-2 py-0.5 rounded border bg-blue-950 text-blue-400 border-blue-800 mono font-semibold">10-Code</span>
+                    </div>
+                    <p class="text-xs text-slate-200 mono font-medium mb-2">${item.title}</p>
+                    <div class="text-[10px] text-amber-400/80 mono bg-amber-500/5 px-2 py-1 rounded border border-amber-500/20 flex items-center gap-1">
+                        <i class="fa-solid fa-microphone"></i> Click to view radio phrasing
+                    </div>
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        function renderSignals() {
+            const grid = document.getElementById('signalsGrid');
+            const searchTerm = document.getElementById('searchSignals').value.toLowerCase();
+
+            grid.innerHTML = '';
+
+            const filtered = signalsData.filter(item => {
+                return item.code.toLowerCase().includes(searchTerm) || item.title.toLowerCase().includes(searchTerm) || item.desc.toLowerCase().includes(searchTerm);
+            });
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-8 text-mdso-dim text-xs mono">NO SIGNALS FOUND MATCHING YOUR SEARCH.</div>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'bg-mdso-black border border-mdso-border rounded-lg p-3.5 flex flex-col justify-between shadow-sm hover:border-amber-500/60 transition cursor-pointer group relative';
+                const standardPhrasing = `Control, unit responding to ${item.code} (${item.title}) at location.`;
+                div.onclick = () => openModal(item.code, item.title, item.desc, standardPhrasing, "Broadcast nature of incident and request backup if required.", 'Signal');
+                div.innerHTML = `
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="mono font-bold text-amber-400 text-sm group-hover:underline flex items-center gap-1.5">
+                            ${item.code} <i class="fa-solid fa-circle-info text-[10px] text-amber-500 opacity-70"></i>
+                        </span>
+                        <span class="text-[10px] px-2 py-0.5 rounded border bg-emerald-950 text-emerald-400 border-emerald-800 mono font-semibold">Signal</span>
+                    </div>
+                    <p class="text-xs text-slate-200 mono font-medium mb-2">${item.title}</p>
+                    <div class="text-[10px] text-amber-400/80 mono bg-amber-500/5 px-2 py-1 rounded border border-amber-500/20 flex items-center gap-1">
+                        <i class="fa-solid fa-file-lines"></i> Click to view details & dispatch phrasing
+                    </div>
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        function openModal(code, title, desc, phrasing, tip, badgeText) {
+            document.getElementById('modalCodeBadge').innerText = code;
+            document.getElementById('modalCodeBadge').className = badgeText === '10-Code' 
+                ? 'px-2.5 py-1 rounded border mono font-bold text-xs bg-amber-950 text-amber-400 border-amber-800'
+                : 'px-2.5 py-1 rounded border mono font-bold text-xs bg-emerald-950 text-emerald-400 border-emerald-800';
+            document.getElementById('modalCodeTitle').innerText = title;
+            document.getElementById('modalCodeDesc').innerText = desc;
+            document.getElementById('modalCodePhrasing').innerText = `"${phrasing}"`;
+            document.getElementById('modalCodeTip').innerText = tip;
+
+            document.getElementById('codeModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('codeModal').classList.add('hidden');
+        }
+
+        document.getElementById('codeModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('codeModal')) {
+                closeModal();
+            }
+        });
+
+        function renderChannels() {
+            const container = document.getElementById('channelsList');
+            container.innerHTML = '';
+            channelsData.forEach(c => {
+                const div = document.createElement('div');
+                div.className = 'bg-mdso-black border border-mdso-border rounded-lg p-3.5';
+                div.innerHTML = `
+                    <div class="flex items-center justify-between mb-1">
+                        <h3 class="text-amber-400 font-bold text-xs mono">${c.ch}</h3>
+                        <span class="text-[10px] bg-mdso-panel text-mdso-dim px-2 py-0.5 rounded border border-mdso-border mono font-medium">${c.title}</span>
+                    </div>
+                    <p class="text-xs text-slate-300 mono leading-relaxed">${c.desc}</p>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function renderResponseCodes() {
+            const container = document.getElementById('responseCodesList');
+            container.innerHTML = '';
+            responseCodesData.forEach(r => {
+                const div = document.createElement('div');
+                div.className = 'bg-mdso-black border border-mdso-border rounded-lg p-3.5';
+                div.innerHTML = `
+                    <div class="flex items-center justify-between mb-1">
+                        <h3 class="text-amber-400 font-bold text-xs mono">${r.code}</h3>
+                        <span class="text-[10px] bg-amber-500/10 text-amber-300 px-2 py-0.5 rounded border border-amber-500/30 mono font-semibold">${r.title}</span>
+                    </div>
+                    <p class="text-xs text-slate-300 mono leading-relaxed">${r.desc}</p>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function renderForceLevels() {
+            const container = document.getElementById('forceLevelsContainer');
+            container.innerHTML = '';
+            forceLevelsData.forEach(f => {
+                const div = document.createElement('div');
+                div.className = 'bg-mdso-black border border-mdso-border rounded-lg p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3';
+                div.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="bg-amber-500/20 border border-amber-500/40 text-amber-400 font-bold text-xs px-3 py-2 rounded mono shrink-0">
+                            ${f.level}
+                        </div>
+                        <div>
+                            <h3 class="text-xs sm:text-sm font-bold text-white mono">${f.title}</h3>
+                            <p class="text-xs text-slate-400 mono mt-0.5">${f.desc}</p>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+    </script>
+</body>
+</html>
